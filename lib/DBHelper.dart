@@ -1,8 +1,9 @@
 import 'package:chasier/database/pengaturanQuery.dart';
 import 'package:chasier/database/tempQuery.dart';
 import 'package:sqflite/sqflite.dart' as sqlite;
-import 'package:sqflite/sqlite_api.dart';
+
 import 'package:path/path.dart' as path;
+import 'package:sqflite/sqlite_api.dart';
 
 class DBHelper {
   static DBHelper _dbHelper = DBHelper._singleton();
@@ -22,6 +23,7 @@ class DBHelper {
 
   Future<Database> openDB() async {
     final dbPath = await sqlite.getDatabasesPath();
+
     return sqlite.openDatabase(path.join(dbPath, 'biztro.db'),
         onCreate: (db, version) {
       tables.forEach((table) async {

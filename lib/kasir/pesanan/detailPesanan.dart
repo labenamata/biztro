@@ -7,7 +7,6 @@ import 'package:chasier/komponen/customPrimaryButton.dart';
 import 'package:chasier/komponen/customSecondaryButton.dart';
 import 'package:chasier/menu/menuList.dart';
 import 'package:chasier/model/modelPenjualan.dart';
-import 'package:chasier/status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -493,8 +492,11 @@ class DetailPesanan extends StatelessWidget {
                         harga: snapshot.data!.dataPenjualan[0]
                             .detailPenjualan[index].menu.price,
                         jumlah: snapshot.data!.dataPenjualan[0]
-                            .detailPenjualan[index].qty == 0 ? 1 :snapshot.data!.dataPenjualan[0]
-                            .detailPenjualan[index].qty,
+                                    .detailPenjualan[index].qty ==
+                                0
+                            ? 1
+                            : snapshot.data!.dataPenjualan[0]
+                                .detailPenjualan[index].qty,
                         total: snapshot.data!.dataPenjualan[0]
                             .detailPenjualan[index].menu.price,
                         note: snapshot

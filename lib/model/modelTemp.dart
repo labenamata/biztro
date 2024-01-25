@@ -20,8 +20,7 @@ class TempModel {
   int price;
 
   TempModel(
-      {
-      required this.menuId,
+      {required this.menuId,
       required this.varianId,
       required this.varian,
       required this.total,
@@ -33,7 +32,6 @@ class TempModel {
 
   factory TempModel.fromJson(Map<String, dynamic> json) {
     return TempModel(
- 
         menuId: json['menu_id'],
         varianId: json['variant_id'],
         varian: json['variant'],
@@ -63,7 +61,6 @@ class TempModel {
     var resultObject = await _helper.getData(TempQuery.TABLE_NAME);
     return resultObject
         .map((item) => TempModel(
-   
               menuId: item["menu_id"],
               varian: item["variant"] ?? 0,
               varianId: item["variant_id"],
@@ -82,29 +79,28 @@ class TempModel {
     // final date = DateTime.parse(tanggal);
     // final formatter = DateFormat('yyyy/mm/dd');
     // final searchDate = formatter.format(date);
-    String isPaid = "";
-    if (tipe == "cash") {
-      isPaid = "";
-    } else {
-      isPaid = tipe;
-    }
+    // String isPaid = "";
+    // if (tipe == "cash") {
+    //   isPaid = "";
+    // } else {
+    //   isPaid = tipe;
+    // }
     try {
       DBHelper _helper = new DBHelper();
       var resultObject = await _helper.getData(TempQuery.TABLE_NAME);
-      List<TempModel> temp = resultObject
-          .map((item) => TempModel(
-
-                menuId: item["menu_id"],
-                varian: item["varian"] ?? " ",
-                varianId: item["variant_id"],
-                total: item["total"],
-                isTakeaway: item["is_takeaway"],
-                qty: item["qty"],
-                note: item["note"] ?? " ",
-                price: item["price"],
-                name: item["name"],
-              ))
-          .toList();
+      // List<TempModel> temp = resultObject
+      //     .map((item) => TempModel(
+      //           menuId: item["menu_id"],
+      //           varian: item["varian"] ?? " ",
+      //           varianId: item["variant_id"],
+      //           total: item["total"],
+      //           isTakeaway: item["is_takeaway"],
+      //           qty: item["qty"],
+      //           note: item["note"] ?? " ",
+      //           price: item["price"],
+      //           name: item["name"],
+      //         ))
+      //     .toList();
       final response = await http
           .post(Uri.parse(pengaturan.alamatIP + '/api/auth/save-order'),
               headers: <String, String>{

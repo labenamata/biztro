@@ -1,6 +1,5 @@
 import 'package:bluetooth_thermal_printer/bluetooth_thermal_printer.dart';
 import 'package:chasier/bloc/blocDetail.dart';
-import 'package:chasier/bluetooth_thermal/function_bluetooth.dart';
 import 'package:chasier/constans.dart';
 import 'package:chasier/model/modelPenjualan.dart';
 import 'package:chasier/printKembali.dart';

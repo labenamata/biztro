@@ -164,7 +164,7 @@ class PenjualanBloc extends Bloc<PenjualanEvent, PenjualanState> {
 
   Future<void> _updateOrder(
       UpdateOrder event, Emitter<PenjualanState> emit) async {
-    Future<String> status;
-    status = ParsingPenjualan.updateOrder(event.idPenjualan);
+    //Future<String> status;
+    await ParsingPenjualan.updateOrder(event.idPenjualan);
   }
 }
