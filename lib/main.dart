@@ -10,18 +10,21 @@ import 'package:chasier/bloc/blocSend.dart';
 import 'package:chasier/bloc/blocTable.dart';
 import 'package:chasier/bloc/blocTemp.dart';
 import 'package:chasier/bloc/blocTotalPenjualan.dart';
-import 'package:chasier/constans.dart';
+
 import 'package:chasier/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class MyHttpOverrides extends HttpOverrides{
+class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext? context){
+  HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
+
 void main() {
   HttpOverrides.global = MyHttpOverrides();
   runApp(MyApp());
@@ -56,9 +59,11 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
             title: 'Bistro',
+            debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              fontFamily: 'OpenSans-Regular',
-              primaryColor:warnaPrimerLight,
+              useMaterial3: true,
+              fontFamily: GoogleFonts.poppins().fontFamily,
+              //primaryColor: warnaPrimerLight,
             ),
             home: LoginPage()));
   }

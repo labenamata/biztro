@@ -2,11 +2,11 @@ import 'package:chasier/bloc/blocLogin.dart';
 import 'package:chasier/constans.dart';
 import 'package:chasier/kasir/transaksi/kelolaTransaksi.dart';
 import 'package:chasier/komponen/customPrimaryButton.dart';
-import 'package:chasier/komponen/customSecondaryButton.dart';
 import 'package:chasier/model/modelPengaturan.dart';
-import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:line_icons/line_icons.dart';
 import 'pengaturan.dart' as pengaturan;
 
 class LoginPage extends StatefulWidget {
@@ -44,13 +44,11 @@ class _LoginPageState extends State<LoginPage> {
   String pesan = "";
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor:
-          theme == "dark" ? warnaBackgroundDark : warnaBackgroundLight,
-      body: ColorfulSafeArea(
-        //color: theme == "dark" ? warnaDarkDark : warnaDarkLight,
-        child: OrientationBuilder(
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: backgroundColor,
+        body: OrientationBuilder(
           builder: (BuildContext context, Orientation orientation) {
             if (orientation == Orientation.portrait) {
               return Container(
@@ -63,10 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 50,
                       ),
                       Card(
-                        // color: theme == "dark"
-                        //     ? warnaLightDark.withOpacity(0.2)
-                        //     : warnaPrimerDark,
-                        elevation: 5,
+                        //elevation: 1,
                         child: Container(
                           height: 300,
                           padding: EdgeInsets.all(16),
@@ -81,18 +76,15 @@ class _LoginPageState extends State<LoginPage> {
                               Text(
                                 "LOGIN",
                                 style: TextStyle(
-                                  fontSize: 26,
-                                  fontWeight: FontWeight.bold,
-                                  color: theme == "dark"
-                                      ? warnaTeksDark
-                                      : warnaTeksLight,
-                                ),
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.bold,
+                                    color: textBold),
                               ),
                               Spacer(),
                               buildInput(
                                   controller: userController,
                                   nama: "Username",
-                                  ikon: Icons.person,
+                                  ikon: LineIcons.user,
                                   obscure: false),
                               SizedBox(
                                 height: 10,
@@ -100,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                               buildInput(
                                   controller: passController,
                                   nama: "Password",
-                                  ikon: Icons.lock,
+                                  ikon: LineIcons.lock,
                                   obscure: true),
                               Spacer(),
                               buildLoginButton(context),
@@ -122,52 +114,44 @@ class _LoginPageState extends State<LoginPage> {
                     Expanded(
                         child: Image(image: AssetImage('assets/logo.png'))),
                     Expanded(
-                      child: Card(
-                        // color: theme == "dark"
-                        //     ? warnaLightDark.withOpacity(0.2)
-                        //     : warnaPrimerLight,
-                        elevation: 5,
-                        child: Container(
-                          // height: 300,
-                          padding: EdgeInsets.all(16),
+                      child: Container(
+                        // height: 300,
+                        padding: EdgeInsets.all(16),
 
-                          child: Column(
-                            children: [
-                              Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: GestureDetector(
-                                      onTap: () => settingAlamat(context),
-                                      child: Icon(
-                                        Icons.menu,
-                                        color: warnaPrimer,
-                                      ))),
-                              Text(
-                                "LOGIN",
-                                style: TextStyle(
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.bold,
-                                    color: theme == "dark"
-                                        ? warnaTeksDark
-                                        : warnaTeksLight),
-                              ),
-                              Spacer(),
-                              buildInput(
-                                  controller: userController,
-                                  nama: "Username",
-                                  ikon: Icons.person,
-                                  obscure: false),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              buildInput(
-                                  controller: passController,
-                                  nama: "Password",
-                                  ikon: Icons.lock,
-                                  obscure: true),
-                              Spacer(),
-                              buildLoginButton(context),
-                            ],
-                          ),
+                        child: Column(
+                          children: [
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: GestureDetector(
+                                    onTap: () => settingAlamat(context),
+                                    child: Icon(
+                                      Icons.menu,
+                                      color: warnaPrimer,
+                                    ))),
+                            Text(
+                              "LOGIN",
+                              style: TextStyle(
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.bold,
+                                  color: textBold),
+                            ),
+                            //Spacer(),
+                            buildInput(
+                                controller: userController,
+                                nama: "Username",
+                                ikon: LineIcons.user,
+                                obscure: false),
+                            // SizedBox(
+                            //   height: 10,
+                            // ),
+                            buildInput(
+                                controller: passController,
+                                nama: "Password",
+                                ikon: LineIcons.lock,
+                                obscure: true),
+                            Spacer(),
+                            buildLoginButton(context),
+                          ],
                         ),
                       ),
                     ),
@@ -200,9 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           CircularProgressIndicator(
-                            color: theme == "dark"
-                                ? warnaPrimerDark
-                                : warnaPrimerLight,
+                            color: primaryColor,
                           ),
                           SizedBox(
                             width: 10,
@@ -214,15 +196,13 @@ class _LoginPageState extends State<LoginPage> {
                       LoginFailed loginFailed = state;
                       Future.delayed(new Duration(seconds: 1), () {
                         Navigator.pop(context);
-                        //FocusScope.of(context).unfocus();
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(snackBar(loginFailed.message));
+                        Fluttertoast.showToast(msg: loginFailed.message);
                       });
                       return Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           CircularProgressIndicator(
-                            color: warnaPrimerLight,
+                            color: primaryColor,
                           ),
                           SizedBox(
                             width: 10,
@@ -272,9 +252,7 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           CircularProgressIndicator(
-                            color: theme == "dark"
-                                ? warnaPrimerDark
-                                : warnaPrimerLight,
+                            color: primaryColor,
                           ),
                           SizedBox(
                             width: 10,
@@ -289,18 +267,12 @@ class _LoginPageState extends State<LoginPage> {
         });
   }
 
-  SnackBar snackBar(String mesg) {
-    return SnackBar(
-      content: Text(mesg),
-    );
-  }
-
   Row buildLoginButton(BuildContext context) {
     LoginBloc loginData = BlocProvider.of<LoginBloc>(context);
     return Row(
       children: [
         Expanded(
-            child: CustomSecondaryButton(
+            child: CustomPrimaryButton(
           title: "BATAL",
           onpress: () {
             Navigator.pop(context);
@@ -333,22 +305,18 @@ class _LoginPageState extends State<LoginPage> {
           obscureText: obscure,
           style: TextStyle(color: Colors.black),
           decoration: InputDecoration(
-            // filled: true,
-            // fillColor: theme == "dark" ? warnaPrimerDark : warnaPrimerLight,
-            contentPadding: EdgeInsets.symmetric(horizontal: 10),
-            //labelText: nama,
-            hintText: nama,
-            hintStyle: TextStyle(color: Colors.black),
-            labelStyle: TextStyle(color: Colors.black),
-
-            suffixIcon: Icon(ikon, color: Colors.black),
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: warnaPrimer, width: 1)),
-
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: warnaPrimer, width: 1)),
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: warnaPrimer, width: 1)),
+            //contentPadding: EdgeInsets.symmetric(horizontal: 10),
+            // hintText: nama,
+            // hintStyle: TextStyle(color: textColor),
+            labelText: nama,
+            labelStyle: TextStyle(color: textColor),
+            prefixIcon: Icon(ikon, color: primaryColor),
+            enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: primaryColor, width: 1)),
+            border: UnderlineInputBorder(
+                borderSide: BorderSide(color: primaryColor, width: 1)),
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: primaryColor, width: 1)),
           )),
     );
   }
@@ -365,7 +333,8 @@ class _LoginPageState extends State<LoginPage> {
             child: Card(
               //decoration: BoxDecoration(colo),
               child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  width: 200,
+                  padding: EdgeInsets.all(15),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -406,7 +375,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           SizedBox(width: 10),
                           Expanded(
-                            child: CustomSecondaryButton(
+                            child: CustomPrimaryButton(
                                 title: "Batal",
                                 onpress: () {
                                   Navigator.pop(context);

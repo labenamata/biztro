@@ -9,19 +9,16 @@ class CustomPrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: theme == "dark" ? warnaSekunderDark : warnaSekunderLight,
-      borderRadius: BorderRadius.circular(5),
+      color: primaryColor,
+      borderRadius: BorderRadius.circular(10),
       child: InkWell(
-        splashColor: theme == "dark" ? warnaPrimerDark : warnaPrimerLight,
         onTap: onpress,
         child: Container(
           height: 50,
           child: Center(
             child: Text(
               title,
-              style: TextStyle(
-                  color: theme == "dark" ? warnaTitleDark : warnaTitleLight,
-                  fontSize: 16),
+              style: TextStyle(color: Colors.white, fontSize: 16),
             ),
           ),
         ),

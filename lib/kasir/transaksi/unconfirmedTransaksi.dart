@@ -7,6 +7,7 @@ import 'package:chasier/model/modelPenjualan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
 
 final formatter = new NumberFormat("#,###", "id_ID");
 
@@ -41,7 +42,9 @@ class _UnconfirmedTransaksiState extends State<UnconfirmedTransaksi> {
         return penjualanData.add(PenjualanRefresh("unpaid", 0, ""));
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        padding: EdgeInsets.symmetric(
+          horizontal: 16,
+        ),
         child: Column(
           children: [
             buildCari(),
@@ -130,7 +133,7 @@ class _UnconfirmedTransaksiState extends State<UnconfirmedTransaksi> {
     TextEditingController cariController = TextEditingController();
     return Container(
       //padding: EdgeInsets.symmetric(horizontal: 16),
-      height: 47,
+      height: 50,
 
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -138,28 +141,19 @@ class _UnconfirmedTransaksiState extends State<UnconfirmedTransaksi> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                  border: Border.all(
-                      color: theme == "dark"
-                          ? warnaLightDark.withOpacity(0.4)
-                          : warnaPrimerLight),
+                  border: Border.all(color: primaryColor),
                   borderRadius: BorderRadius.circular(5)),
               child: TextField(
                 controller: cariController,
-                cursorColor:
-                    theme == "dark" ? warnaPrimerDark : warnaPrimerLight,
-                style: TextStyle(
-                    color: theme == "dark" ? warnaTeksDark : warnaTeksLight),
+                cursorColor: primaryColor,
+                style: TextStyle(color: textColor),
                 decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: "Nama",
-                    hintStyle: TextStyle(
-                        color: theme == "dark"
-                            ? warnaTeksDark
-                            : warnaTeksLight.withOpacity(0.3)),
+                    hintText: "Nama Pelanggan",
+                    hintStyle: TextStyle(color: textColor),
                     prefixIcon: Icon(
-                      Icons.search,
-                      color:
-                          theme == "dark" ? warnaPrimerDark : warnaPrimerLight,
+                      LineIcons.search,
+                      color: primaryColor,
                     )),
               ),
             ),

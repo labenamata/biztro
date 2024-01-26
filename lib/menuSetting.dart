@@ -6,6 +6,8 @@ import 'package:chasier/model/modelLogin.dart';
 import 'package:chasier/settingPrinter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:line_icons/line_icon.dart';
+import 'package:line_icons/line_icons.dart';
 
 TextEditingController printerController = TextEditingController();
 
@@ -22,7 +24,7 @@ class MenuSetting extends StatelessWidget {
             if (!snapshot.hasData) {
               return Center(
                   child: CircularProgressIndicator(
-                color: warnaPrimer,
+                color: primaryColor,
               ));
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
@@ -32,6 +34,7 @@ class MenuSetting extends StatelessWidget {
                 child: ListView(
                   children: [
                     UserAccountsDrawerHeader(
+                      decoration: BoxDecoration(color: primaryColor),
                       accountName: Text(
                         snapshot.data!.profile.name,
                         style: TextStyle(color: warnaTitle),
@@ -49,48 +52,14 @@ class MenuSetting extends StatelessWidget {
                         ),
                       )),
                     ),
-                    // ListTile(
-                    //   title: Text(
-                    //     "Dark Mode",
-                    //     style: TextStyle(
-                    //         color: theme == "dark"
-                    //             ? warnaTeksDark
-                    //             : warnaTeksLight),
-                    //   ),
-                    //   leading: Icon(
-                    //     Icons.map_outlined,
-                    //     color: theme == "dark"
-                    //         ? warnaPrimerDark
-                    //         : warnaPrimerLight,
-                    //   ),
-                    //   trailing: Switch(
-                    //     value: theme == "dark" ? true : false,
-                    //     onChanged: (bool value) {
-                    //       if (value) {
-                    //         theme = "dark";
-                    //       } else {
-                    //         theme = "light";
-                    //       }
-                    //     },
-                    //   ),
-                    //   onTap: () {
-                    //     Future.delayed(new Duration(milliseconds: 200), () {
-                    //       Navigator.pop(context);
-                    //       Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(
-                    //               builder: (context) => SettingPrinter()));
-                    //     });
-                    //   },
-                    // ),
                     ListTile(
                       title: Text(
                         "Menu Stok",
-                        style: TextStyle(color: warnaTeks),
+                        style: TextStyle(color: textColor),
                       ),
                       leading: Icon(
-                        Icons.dining_outlined,
-                        color: warnaPrimer,
+                        LineIcons.utensils,
+                        color: primaryColor,
                       ),
                       onTap: () {
                         Future.delayed(new Duration(milliseconds: 200), () {
@@ -105,16 +74,11 @@ class MenuSetting extends StatelessWidget {
                     ListTile(
                       title: Text(
                         "Pengaturan",
-                        style: TextStyle(
-                            color: theme == "dark"
-                                ? warnaTeksDark
-                                : warnaTeksLight),
+                        style: TextStyle(color: textColor),
                       ),
                       leading: Icon(
-                        Icons.print_outlined,
-                        color: theme == "dark"
-                            ? warnaPrimerDark
-                            : warnaPrimerLight,
+                        LineIcons.wrench,
+                        color: primaryColor,
                       ),
                       onTap: () {
                         Future.delayed(new Duration(milliseconds: 200), () {
@@ -129,16 +93,11 @@ class MenuSetting extends StatelessWidget {
                     ListTile(
                       title: Text(
                         "Log Out",
-                        style: TextStyle(
-                            color: theme == "dark"
-                                ? warnaTeksDark
-                                : warnaTeksLight),
+                        style: TextStyle(color: textColor),
                       ),
                       leading: Icon(
-                        Icons.logout_outlined,
-                        color: theme == "dark"
-                            ? warnaPrimerDark
-                            : warnaPrimerLight,
+                        LineIcons.powerOff,
+                        color: primaryColor,
                       ),
                       onTap: () {
                         Future.delayed(new Duration(milliseconds: 500), () {

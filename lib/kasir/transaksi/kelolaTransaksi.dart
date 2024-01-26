@@ -4,10 +4,12 @@ import 'package:chasier/kasir/transaksi/confirmedTransaksi.dart';
 import 'package:chasier/kasir/transaksi/unconfirmedTransaksi.dart';
 import 'package:chasier/menu/menuList.dart';
 import 'package:chasier/menuSetting.dart';
-import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:line_icons/line_icons.dart';
+
+final GlobalKey<ScaffoldState> scafKey = GlobalKey();
 
 class KelolaTransaksi extends StatefulWidget {
   const KelolaTransaksi({Key? key}) : super(key: key);
@@ -45,35 +47,40 @@ class _KelolaTransaksiState extends State<KelolaTransaksi>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor:
-            theme == "dark" ? warnaBackgroundDark : warnaBackgroundLight,
-        appBar: AppBar(
-          backgroundColor: warnaPrimer,
-          iconTheme: IconThemeData(color: warnaTitle),
-          title: Text(
-            "TRANSAKSI",
-            style: TextStyle(
-                color: warnaTitle, fontSize: 20, fontWeight: FontWeight.bold),
+    return SafeArea(
+      child: Scaffold(
+          key: scafKey,
+          resizeToAvoidBottomInset: false,
+          backgroundColor: backgroundColor,
+          appBar: AppBar(
+            backgroundColor: backgroundColor,
+            leading: GestureDetector(
+                onTap: () => scafKey.currentState!.openDrawer(),
+                child: Icon(
+                  LineIcons.bars,
+                  color: textColor,
+                )),
+            iconTheme: IconThemeData(color: textColor),
+            title: Text(
+              "TRANSAKSI",
+              style: TextStyle(
+                  color: textBold, fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            //elevation: 1,
+            centerTitle: true,
           ),
-          elevation: 0,
-          centerTitle: true,
-        ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: warnaPrimer,
-          onPressed: () {
-            showAdd(context);
-          },
-          child: Icon(
-            Icons.add,
-            color: warnaTitle,
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: primaryColor,
+            onPressed: () {
+              showAdd(context);
+            },
+            child: Icon(
+              LineIcons.plus,
+              color: Colors.white,
+            ),
           ),
-        ),
-        drawer: MenuSetting(),
-        body: ColorfulSafeArea(
-          color: Colors.white,
-          child: OrientationBuilder(
+          drawer: MenuSetting(),
+          body: OrientationBuilder(
               builder: (BuildContext context, Orientation orientation) {
             return Row(
               children: [
@@ -86,8 +93,8 @@ class _KelolaTransaksiState extends State<KelolaTransaksi>
                 ),
               ],
             );
-          }),
-        ));
+          })),
+    );
   }
 
   void showAdd(BuildContext context) {
@@ -107,11 +114,14 @@ class _KelolaTransaksiState extends State<KelolaTransaksi>
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ListTile(
-                        trailing: Icon(
-                          Icons.food_bank,
-                          color: warnaPrimer,
+                        leading: Icon(
+                          LineIcons.chair,
+                          color: primaryColor,
                         ),
-                        title: Text("Dine In"),
+                        title: Text(
+                          "Dine In",
+                          style: TextStyle(color: textColor),
+                        ),
                         onTap: () {
                           TempBloc penjualanData =
                               BlocProvider.of<TempBloc>(context);
@@ -126,11 +136,12 @@ class _KelolaTransaksiState extends State<KelolaTransaksi>
                         },
                       ),
                       ListTile(
-                        trailing: Icon(
-                          Icons.bike_scooter,
-                          color: warnaPrimer,
+                        leading: Icon(
+                          LineIcons.motorcycle,
+                          color: primaryColor,
                         ),
-                        title: Text("Go Food"),
+                        title:
+                            Text("Go Food", style: TextStyle(color: textColor)),
                         onTap: () {
                           TempBloc penjualanData =
                               BlocProvider.of<TempBloc>(context);
@@ -145,11 +156,12 @@ class _KelolaTransaksiState extends State<KelolaTransaksi>
                         },
                       ),
                       ListTile(
-                        trailing: Icon(
+                        leading: Icon(
                           Icons.motorcycle,
-                          color: warnaPrimer,
+                          color: primaryColor,
                         ),
-                        title: Text("Grab Food"),
+                        title: Text("Grab Food",
+                            style: TextStyle(color: textColor)),
                         onTap: () {
                           TempBloc penjualanData =
                               BlocProvider.of<TempBloc>(context);
@@ -172,28 +184,13 @@ class _KelolaTransaksiState extends State<KelolaTransaksi>
 
   Widget menu() {
     return Container(
-      //padding: EdgeInsets.symmetric(vertical: 5),
-      // decoration: BoxDecoration(
-      //     color: theme == "dark"
-      //         ? warnaLightDark.withOpacity(0.4)
-      //         : warnaPrimerLight),
       child: TabBar(
         controller: tabTransaksi,
         labelColor: Colors.white,
-
-        indicator: BoxDecoration(
-            // gradient: LinearGradient(
-            //     begin: Alignment.topCenter,
-            //     end: Alignment.bottomCenter,
-            //     colors: [warnaPrimer, warnaSekunder.withOpacity(0.5)]),
-            borderRadius: BorderRadius.circular(5),
-            color: warnaPrimer),
-        unselectedLabelColor: warnaPrimer,
+        indicator: BoxDecoration(color: primaryColor),
+        unselectedLabelColor: textColor,
         indicatorSize: TabBarIndicatorSize.tab,
-        indicatorPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 26),
-
-        //indicatorPadding: EdgeInsets.all(5.0),
-        //indicatorColor: theme == "dark" ? warnaSekunderDark : warnaSekunderLight,
+        //indicatorPadding: EdgeInsets.symmetric(vertical: 10),
         tabs: [
           Tab(
             text: "Confirmed",

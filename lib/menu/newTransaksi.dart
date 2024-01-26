@@ -7,6 +7,7 @@ import 'package:chasier/model/modelTemp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
 
 final formatter = new NumberFormat("#,###", "id_ID");
 
@@ -47,6 +48,38 @@ class _NewTransaksiState extends State<NewTransaksi> {
               return Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    SizedBox(
+                      height: 50,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        decoration: BoxDecoration(
+                            color: primaryColor,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Total",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.white),
+                            ),
+                            Text(
+                              formatter.format(tempLoaded.total),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     FutureBuilder<List<TempModel>>(
                         future: tempLoaded.data,
                         builder: (context, snapshot) {
@@ -56,16 +89,17 @@ class _NewTransaksiState extends State<NewTransaksi> {
                             return Text("${snapshot.error}");
                           } else {
                             return Expanded(
-                              child: ListView.builder(
+                              child: ListView.separated(
                                 itemCount: snapshot.data!.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        border: Border(
-                                            bottom: BorderSide(
-                                                color: warnaPrimer))),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                        border:
+                                            Border.all(color: primaryColor)),
                                     //color: Colors.grey,
-                                    padding: EdgeInsets.only(top: 10, left: 10),
+                                    padding: EdgeInsets.only(left: 10),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -81,25 +115,33 @@ class _NewTransaksiState extends State<NewTransaksi> {
                                               Text(
                                                 snapshot.data![index].name,
                                                 style: TextStyle(
+                                                    color: textBold,
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                              Text(snapshot.data![index].qty
-                                                      .toString() +
-                                                  " x " +
-                                                  formatter.format(snapshot
-                                                      .data![index].price)),
-                                              Text("Varian : " +
-                                                  snapshot.data![index].varian),
-                                              Text("Note : " +
-                                                  snapshot.data![index].note),
+                                              Text(
+                                                '${snapshot.data![index].qty.toString()} x ${formatter.format(snapshot.data![index].price)}',
+                                                style:
+                                                    TextStyle(color: textColor),
+                                              ),
+                                              Text(
+                                                  "Varian : ${snapshot.data![index].varian}",
+                                                  style: TextStyle(
+                                                      color: textColor)),
+                                              Text(
+                                                  "Note : ${snapshot.data![index].note} ",
+                                                  style: TextStyle(
+                                                      color: textColor)),
                                             ],
                                           ),
                                         ),
                                         Text(
                                             formatter.format(
                                                 snapshot.data![index].total),
-                                            style: TextStyle(fontSize: 16)),
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: textBold,
+                                                fontWeight: FontWeight.bold)),
                                         SizedBox(
                                           width: 16,
                                         ),
@@ -117,9 +159,20 @@ class _NewTransaksiState extends State<NewTransaksi> {
                                               width: 50,
                                               child: Container(
                                                 decoration: BoxDecoration(
-                                                    color: warnaPrimer),
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                              10,
+                                                            ),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                    color: primaryColor),
                                                 child: Center(
-                                                    child: Icon(Icons.delete,
+                                                    child: Icon(
+                                                        LineIcons
+                                                            .alternateTrashAlt,
                                                         color: Colors.white)),
                                               )),
                                         )
@@ -127,34 +180,20 @@ class _NewTransaksiState extends State<NewTransaksi> {
                                     ),
                                   );
                                 },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return SizedBox(
+                                    height: 10,
+                                  );
+                                },
                               ),
                             );
 
                             // By default, show a loading spinner.
-
                           }
                         }),
-                    Divider(
-                      color: warnaPrimer,
-                      height: 10,
-                    ),
                     SizedBox(
-                      height: 50,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Total",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                          Text(
-                            formatter.format(tempLoaded.total),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                        ],
-                      ),
+                      height: 10,
                     ),
                   ]);
             }
@@ -176,7 +215,10 @@ class _NewTransaksiState extends State<NewTransaksi> {
                 detailBloc.add(TambahPesanan(widget.id));
                 Navigator.pop(context);
               }
-            })
+            }),
+        SizedBox(
+          height: 10,
+        ),
       ],
     ));
   }
@@ -184,11 +226,14 @@ class _NewTransaksiState extends State<NewTransaksi> {
   Container iconTakeaway(int status) {
     if (status == 1) {
       return Container(
-        child: Icon(Icons.shopping_basket_outlined),
+        child: Icon(
+          LineIcons.shoppingBag,
+          color: primaryColor,
+        ),
       );
     } else {
       return Container(
-        child: Icon(Icons.dining),
+        child: Icon(LineIcons.utensilSpoon, color: primaryColor),
       );
     }
   }

@@ -1,5 +1,4 @@
 import 'package:chasier/bloc/blocMenus.dart';
-import 'package:chasier/komponen/customPrimaryButton.dart';
 import 'package:chasier/menu/newTransaksi.dart';
 import 'package:chasier/menu/tambahProduk.dart';
 import 'package:chasier/model/modelMenu.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chasier/constans.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
 
 final formatter = new NumberFormat("#,###", "id_ID");
 
@@ -34,51 +34,55 @@ class _MenuListState extends State<MenuList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: warnaPrimer,
-        title: Text(
-          widget.status == "baru"
-              ? "Transaksi Baru"
-              : "Tambah Pesanan " + widget.nama.toUpperCase(),
-          style: TextStyle(
-            color: warnaTitle,
-            fontSize: 24,
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: backgroundColor,
+        appBar: AppBar(
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: backgroundColor,
+          title: Text(
+            widget.status == "baru"
+                ? "Transaksi Baru"
+                : "Tambah Pesanan " + widget.nama.toUpperCase(),
+            style: TextStyle(
+              color: textBold,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
           ),
         ),
-      ),
-      body: OrientationBuilder(
-          builder: (BuildContext context, Orientation orientation) {
-        return Container(
-          padding: EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    buildCari(),
-                    SizedBox(height: 10),
-                    buildListMenu()
-                  ],
+        body: OrientationBuilder(
+            builder: (BuildContext context, Orientation orientation) {
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      buildCari(),
+                      //SizedBox(height: 10),
+                      buildListMenu()
+                    ],
+                  ),
                 ),
-              ),
-              VerticalDivider(
-                width: 10,
-              ),
-              Expanded(
-                  child: NewTransaksi(
-                id: widget.id,
-                status: widget.status,
-                priceId: widget.priceId,
-              ))
-            ],
-          ),
-        );
-      }),
+                SizedBox(
+                  width: 30,
+                ),
+                Expanded(
+                    child: NewTransaksi(
+                  id: widget.id,
+                  status: widget.status,
+                  priceId: widget.priceId,
+                ))
+              ],
+            ),
+          );
+        }),
+      ),
     );
   }
 
@@ -115,9 +119,7 @@ class _MenuListState extends State<MenuList> {
                 } else {
                   return Expanded(
                     child: ListView.builder(
-                      // separatorBuilder: (context, index) => SizedBox(
-                      //   height: 10,
-                      // ),
+                      padding: EdgeInsets.zero,
                       itemCount: snapshot.data!.menus.length,
                       itemBuilder: (BuildContext context, int index) {
                         late int harga;
@@ -150,45 +152,56 @@ class _MenuListState extends State<MenuList> {
   Container buildCari() {
     TextEditingController cariController = TextEditingController();
     return Container(
-      //padding: EdgeInsets.symmetric(horizontal: 16),
-      height: 47,
-
+      height: 50,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
             child: Container(
-              decoration: BoxDecoration(
-                  border: Border.all(color: warnaPrimer),
-                  borderRadius: BorderRadius.circular(5)),
+              // decoration: BoxDecoration(
+              //     border: Border.all(color: primaryColor),
+              //     borderRadius: BorderRadius.circular(5)),
               child: TextField(
                 controller: cariController,
-                cursorColor: warnaPrimer,
-                style: TextStyle(color: warnaTeks),
+                cursorColor: primaryColor,
+                style: TextStyle(color: textColor),
                 decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "Nama",
-                    hintStyle: TextStyle(color: warnaTeks.withOpacity(0.3)),
+                    //border: UnderlineInputBorder(),
+
+                    contentPadding: EdgeInsets.zero,
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: textColor)),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: primaryColor)),
+                    labelText: "Nama",
+                    labelStyle: TextStyle(color: textColor),
                     prefixIcon: Icon(
-                      Icons.search,
-                      color: warnaPrimer,
+                      LineIcons.search,
+                      color: primaryColor,
                     )),
+                onChanged: (value) {
+                  Future.delayed(Duration(seconds: 1), () {
+                    MenusBloc penjualanData =
+                        BlocProvider.of<MenusBloc>(context);
+                    penjualanData.add(GetMenu(value));
+                  });
+                },
               ),
             ),
           ),
-          SizedBox(
-            width: 16,
-          ),
-          SizedBox(
-              width: 100,
-              child: CustomPrimaryButton(
-                  title: "Cari",
-                  onpress: () {
-                    FocusScope.of(context).unfocus();
-                    MenusBloc penjualanData =
-                        BlocProvider.of<MenusBloc>(context);
-                    penjualanData.add(GetMenu(cariController.text));
-                  })),
+          // SizedBox(
+          //   width: 10,
+          // ),
+          // SizedBox(
+          //     width: 100,
+          //     child: CustomPrimaryButton(
+          //         title: "Cari",
+          //         onpress: () {
+          //           FocusScope.of(context).unfocus();
+          //           MenusBloc penjualanData =
+          //               BlocProvider.of<MenusBloc>(context);
+          //           penjualanData.add(GetMenu(cariController.text));
+          //         })),
         ],
       ),
     );
@@ -202,9 +215,9 @@ class _MenuListState extends State<MenuList> {
       required int stok}) {
     return Material(
       borderRadius: BorderRadius.all(Radius.circular(10)),
+      color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.all(Radius.circular(10)),
-        splashColor: warnaPrimer,
         onTap: () {
           FocusScope.of(context).unfocus();
           if (stok <= 0) {
@@ -227,15 +240,20 @@ class _MenuListState extends State<MenuList> {
         },
         child: Container(
             child: ListTile(
+          dense: true,
+          contentPadding: EdgeInsets.zero,
           leading: leadingList(name),
           trailing: Text(formatter.format(price),
               style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  fontSize: 14)),
+                  fontWeight: FontWeight.bold, color: textBold, fontSize: 14)),
           title: Text(name.toUpperCase(),
-              style: TextStyle(color: warnaTeks, fontSize: 14)),
-          subtitle: Text("Stock : " + stok.toString()),
+              style: TextStyle(
+                  color: textBold, fontSize: 14, fontWeight: FontWeight.bold)),
+          subtitle: Text("Stock : ${stok.toString()}",
+              style: TextStyle(
+                color: textColor,
+                fontSize: 12,
+              )),
         )),
       ),
     );
@@ -252,11 +270,11 @@ class _MenuListState extends State<MenuList> {
       //padding: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(5)),
-          color: warnaPrimer),
+          color: primaryColor),
       child: Center(
           child: Text(
         "$huruf3",
-        style: TextStyle(fontSize: 12, color: Colors.white),
+        style: TextStyle(fontSize: 20, color: Colors.white),
       )),
     );
   }

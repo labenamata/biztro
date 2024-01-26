@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-String  theme = "light";
+String theme = "light";
 
 const warnaPrimerDark = Color(0xFFCC2026);
 const warnaSekunderDark = Color(0xFFDA0037);
@@ -27,3 +27,8 @@ const warnaAccent = Colors.white;
 const warnaTeks = Colors.black;
 const warnaTitle = Colors.white;
 const warnaAlert = Colors.red;
+
+const primaryColor = Color(0xFFD04848);
+const backgroundColor = Color(0xFFF4F5FA);
+const textColor = Color(0xFFAEB1BC);
+const textBold = Color(0xFF66686C);
