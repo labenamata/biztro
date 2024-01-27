@@ -4,6 +4,7 @@ import 'package:chasier/model/modelMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
 
 final formatter = new NumberFormat("#,###", "id_ID");
 
@@ -50,49 +51,64 @@ class _TambahProdukState extends State<TambahProduk> {
       ),
       elevation: 0,
       backgroundColor: Colors.white,
-      child: Container(
-        //height: 200,
-        width: 500,
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        decoration: BoxDecoration(
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(bottom: 10),
-                  child: Row(
+      child: Card(
+        child: Container(
+          //height: 200,
+          width: 500,
+          padding: EdgeInsets.all(20),
+          // decoration: BoxDecoration(
+          //   shape: BoxShape.rectangle,
+          //   borderRadius: BorderRadius.circular(10),
+          // ),
+          child: SingleChildScrollView(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          widget.name.toUpperCase(),
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: textBold,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text("IDR " + formatter.format(widget.price),
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: textBold,
+                                fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        widget.name.toUpperCase(),
-                        style: TextStyle(fontSize: 16),
+                      Expanded(child: comboVarian()),
+                      SizedBox(
+                        width: 20,
                       ),
-                      Text("IDR " + formatter.format(widget.price),
-                          style: TextStyle(fontSize: 16)),
+                      Expanded(
+                        child: jumlahProduk(),
+                      ),
                     ],
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(child: comboVarian()),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Expanded(
-                      child: jumlahProduk(),
-                    ),
-                  ],
-                ),
-                Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: noteProduk()),
-                buildTombolOk(context)
-              ]),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  noteProduk(),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  buildTombolOk(context)
+                ]),
+          ),
         ),
       ),
     );
@@ -107,7 +123,7 @@ class _TambahProdukState extends State<TambahProduk> {
           Expanded(
               child: Container(
                   decoration: BoxDecoration(
-                      color: Colors.red,
+                      color: primaryColor,
                       borderRadius: BorderRadius.all(Radius.circular(5))),
                   child: Material(
                       color: Colors.transparent,
@@ -128,7 +144,7 @@ class _TambahProdukState extends State<TambahProduk> {
           Expanded(
               child: Container(
                   decoration: BoxDecoration(
-                      color: warnaSekunder,
+                      color: primaryColor,
                       borderRadius: BorderRadius.all(Radius.circular(5))),
                   child: Material(
                       color: Colors.transparent,
@@ -156,7 +172,7 @@ class _TambahProdukState extends State<TambahProduk> {
                         child: Center(
                           child: Text(
                             "OK",
-                            style: TextStyle(color: warnaTitle),
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                       )))),
@@ -187,9 +203,10 @@ class _TambahProdukState extends State<TambahProduk> {
             ),
           ),
         ),
-        Padding(
-            padding: EdgeInsets.symmetric(horizontal: 5),
-            child: Text("Takeaway")),
+        SizedBox(
+          width: 10,
+        ),
+        Text("Takeaway"),
         Checkbox(
           checkColor: Colors.white,
           value: takeaway,
@@ -206,7 +223,7 @@ class _TambahProdukState extends State<TambahProduk> {
   Container jumlahProduk() {
     return Container(
       decoration: BoxDecoration(
-          border: Border.all(color: warnaPrimer),
+          border: Border.all(color: primaryColor),
           borderRadius: BorderRadius.all(Radius.circular(5))),
       height: 50,
       // decoration:
@@ -218,9 +235,9 @@ class _TambahProdukState extends State<TambahProduk> {
             child: Container(
                 height: 50,
                 child: Material(
-                  color: Colors.transparent,
+                  color: primaryColor,
                   child: InkWell(
-                      splashColor: warnaPrimer,
+                      //splashColor: warnaPrimer,
                       onTap: () {
                         setState(() {
                           if (jumlah > 1) {
@@ -229,8 +246,8 @@ class _TambahProdukState extends State<TambahProduk> {
                         });
                       },
                       child: Icon(
-                        Icons.remove,
-                        //color: Colors.,
+                        LineIcons.minus,
+                        color: Colors.white,
                       )),
                 )),
           ),
@@ -238,8 +255,10 @@ class _TambahProdukState extends State<TambahProduk> {
             child: Container(
               child: Center(
                 child: Text(jumlah.toString(),
-                    style:
-                        TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: primaryColor)),
               ),
             ),
           ),
@@ -247,9 +266,8 @@ class _TambahProdukState extends State<TambahProduk> {
             child: Container(
                 height: 50,
                 child: Material(
-                  color: Colors.transparent,
+                  color: primaryColor,
                   child: InkWell(
-                      splashColor: warnaPrimer,
                       onTap: () {
                         setState(() {
                           if (jumlah < widget.stok) {
@@ -258,8 +276,8 @@ class _TambahProdukState extends State<TambahProduk> {
                         });
                       },
                       child: Icon(
-                        Icons.add,
-                        //color: text_color,
+                        LineIcons.plus,
+                        color: Colors.white,
                       )),
                 )),
           ),
@@ -271,16 +289,16 @@ class _TambahProdukState extends State<TambahProduk> {
   Container comboVarian() {
     return Container(
       decoration: BoxDecoration(
-          border: Border.all(color: warnaPrimer),
+          border: Border.all(color: primaryColor),
           borderRadius: BorderRadius.all(Radius.circular(5))),
       height: 50,
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<int>(
-          hint: Text("Varian", style: TextStyle(color: Colors.black)),
-          style: TextStyle(color: Colors.black),
+          hint: Text("Varian", style: TextStyle(color: textColor)),
+          style: TextStyle(color: textColor),
           isExpanded: true,
-          icon: Icon(Icons.keyboard_arrow_down, color: Colors.black),
+          icon: Icon(LineIcons.angleDown, color: primaryColor),
           value: _varian,
           items: widget.variant.map((value) {
             return DropdownMenuItem(

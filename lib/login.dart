@@ -42,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
   late bool progress;
   String role = "";
   String pesan = "";
+  bool isObscure = true;
   @override
   Widget build(BuildContext context) {
     return SafeArea(

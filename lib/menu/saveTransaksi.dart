@@ -3,10 +3,10 @@ import 'package:chasier/bloc/blocSend.dart';
 import 'package:chasier/bloc/blocTable.dart';
 import 'package:chasier/constans.dart';
 import 'package:chasier/komponen/customPrimaryButton.dart';
-import 'package:chasier/komponen/customSecondaryButton.dart';
 import 'package:chasier/model/modelTable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:line_icons/line_icons.dart';
 
 class SaveTransaksi extends StatefulWidget {
   final int priceId;
@@ -25,33 +25,49 @@ class _SaveTransaksiState extends State<SaveTransaksi> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
         elevation: 0,
         backgroundColor: Colors.white,
         child: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(20),
             width: 250,
-            height: 200,
+            height: 300,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Text(
+                  'Atas Nama',
+                  style:
+                      TextStyle(color: textBold, fontWeight: FontWeight.bold),
+                ),
                 Container(
                   decoration: BoxDecoration(
-                      border: Border.all(color: warnaPrimer),
+                      border: Border.all(color: primaryColor),
                       borderRadius: BorderRadius.circular(5)),
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: TextField(
                     controller: namaController,
+                    style: TextStyle(color: textColor),
                     decoration: InputDecoration(
                         hintText: "Nama", border: InputBorder.none),
                   ),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Meja',
+                  style:
+                      TextStyle(color: textBold, fontWeight: FontWeight.bold),
+                ),
                 BlocBuilder<TablesBloc, TablesState>(builder: (context, state) {
                   if (state is TablesLoading) {
-                    return Center(child: Text("Meja"));
+                    return Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: primaryColor),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Center(child: Text("Meja")));
                   } else if (state is TablesError) {
                     TablesError tablesError = state;
                     return Center(child: Text(tablesError.message));
@@ -67,17 +83,17 @@ class _SaveTransaksiState extends State<SaveTransaksi> {
                           } else {
                             return Container(
                               decoration: BoxDecoration(
-                                  border: Border.all(color: warnaPrimer),
+                                  border: Border.all(color: primaryColor),
                                   borderRadius: BorderRadius.circular(5)),
                               padding: EdgeInsets.symmetric(horizontal: 10),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<int>(
                                   hint: Text("Meja",
-                                      style: TextStyle(color: Colors.black)),
-                                  style: TextStyle(color: Colors.black),
+                                      style: TextStyle(color: textColor)),
+                                  style: TextStyle(color: textColor),
                                   isExpanded: true,
-                                  icon: Icon(Icons.keyboard_arrow_down,
-                                      color: Colors.black),
+                                  icon: Icon(LineIcons.angleDown,
+                                      color: primaryColor),
                                   value: _tables,
                                   items: snapshot.data!.tables.map((value) {
                                     return DropdownMenuItem(
@@ -103,16 +119,14 @@ class _SaveTransaksiState extends State<SaveTransaksi> {
                 //   controller: mejaController,
                 //   decoration: InputDecoration(hintText: "Meja"),
                 // ),
-                SizedBox(
-                  height: 16,
-                ),
+                Spacer(),
                 SizedBox(
                   height: 50,
                   child: Row(
                     //crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Expanded(
-                        child: CustomSecondaryButton(
+                        child: CustomPrimaryButton(
                             title: "Batal",
                             onpress: () {
                               Navigator.pop(context);

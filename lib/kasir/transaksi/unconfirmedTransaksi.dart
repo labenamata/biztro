@@ -2,7 +2,6 @@ import 'package:chasier/bloc/blocDetail.dart';
 import 'package:chasier/bloc/blocPenjualan.dart';
 import 'package:chasier/constans.dart';
 import 'package:chasier/kasir/pesanan/kelolaPesanan.dart';
-import 'package:chasier/komponen/customPrimaryButton.dart';
 import 'package:chasier/model/modelPenjualan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -85,29 +84,44 @@ class _UnconfirmedTransaksiState extends State<UnconfirmedTransaksi> {
                         var newFormat = DateFormat("dd-MMM-yyyy HH:mm");
 
                         return Expanded(
-                          child: ListView.separated(
-                            separatorBuilder: (context, index) => SizedBox(
-                              height: 10,
-                            ),
-                            itemCount: snapshot.data!.dataPenjualan.length,
+                          child: GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 5,
+                                    crossAxisSpacing: 8,
+                                    mainAxisSpacing: 8),
+                            itemCount: snapshot.data!.dataPenjualan.length < 10
+                                ? 10
+                                : snapshot.data!.dataPenjualan.length,
                             itemBuilder: (BuildContext context, int index) {
-                              var date = DateTime.parse(snapshot
-                                  .data!.dataPenjualan[index].time
-                                  .toString());
-                              var tanggal = newFormat.format(date);
-                              return pesanan(
-                                id: snapshot.data!.dataPenjualan[index].id,
-                                nama: snapshot.data!.dataPenjualan[index].name
-                                    .toUpperCase(),
-                                meja: snapshot
-                                    .data!.dataPenjualan[index].table.name,
-                                total:
-                                    snapshot.data!.dataPenjualan[index].total,
-                                tanggal: tanggal,
-                                ppn: snapshot.data!.dataPenjualan[index].ppn,
-                                subtotal: snapshot
-                                    .data!.dataPenjualan[index].subtotal,
-                              );
+                              if (index + 1 <=
+                                  snapshot.data!.dataPenjualan.length) {
+                                var date = DateTime.parse(snapshot
+                                    .data!.dataPenjualan[index].time
+                                    .toString());
+                                var tanggal = newFormat.format(date);
+                                return pesanan(
+                                  id: snapshot.data!.dataPenjualan[index].id,
+                                  nama: snapshot.data!.dataPenjualan[index].name
+                                      .toUpperCase(),
+                                  meja: snapshot
+                                      .data!.dataPenjualan[index].table.name,
+                                  total:
+                                      snapshot.data!.dataPenjualan[index].total,
+                                  tanggal: tanggal,
+                                  ppn: snapshot.data!.dataPenjualan[index].ppn,
+                                  subtotal: snapshot
+                                      .data!.dataPenjualan[index].subtotal,
+                                );
+                              } else {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      //border: Border.all(color: primaryColor),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10))),
+                                );
+                              }
                             },
                           ),
                         );
@@ -139,38 +153,44 @@ class _UnconfirmedTransaksiState extends State<UnconfirmedTransaksi> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border.all(color: primaryColor),
-                  borderRadius: BorderRadius.circular(5)),
-              child: TextField(
-                controller: cariController,
-                cursorColor: primaryColor,
-                style: TextStyle(color: textColor),
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "Nama Pelanggan",
-                    hintStyle: TextStyle(color: textColor),
-                    prefixIcon: Icon(
-                      LineIcons.search,
-                      color: primaryColor,
-                    )),
-              ),
+            child: TextField(
+              controller: cariController,
+              cursorColor: primaryColor,
+              style: TextStyle(color: textColor),
+              decoration: InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: textColor)),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: primaryColor)),
+                  hintText: "Nama Pelanggan",
+                  hintStyle: TextStyle(color: textColor),
+                  prefixIcon: Icon(
+                    LineIcons.search,
+                    color: primaryColor,
+                  )),
+              onChanged: (value) {
+                Future.delayed(Duration(seconds: 1), () {
+                  PenjualanBloc penjualanData =
+                      BlocProvider.of<PenjualanBloc>(context);
+                  penjualanData
+                      .add(PenjualanRefresh("unpaid", 0, cariController.text));
+                });
+              },
             ),
           ),
-          SizedBox(
-            width: 16,
-          ),
-          SizedBox(
-              width: 100,
-              child: CustomPrimaryButton(
-                  title: "Cari",
-                  onpress: () {
-                    PenjualanBloc penjualanData =
-                        BlocProvider.of<PenjualanBloc>(context);
-                    penjualanData.add(
-                        PenjualanRefresh("unpaid", 0, cariController.text));
-                  })),
+          // SizedBox(
+          //   width: 16,
+          // ),
+          // SizedBox(
+          //     width: 100,
+          //     child: CustomPrimaryButton(
+          //         title: "Cari",
+          //         onpress: () {
+          //           PenjualanBloc penjualanData =
+          //               BlocProvider.of<PenjualanBloc>(context);
+          //           penjualanData.add(
+          //               PenjualanRefresh("unpaid", 0, cariController.text));
+          //         })),
         ],
       ),
     );
@@ -187,7 +207,6 @@ class _UnconfirmedTransaksiState extends State<UnconfirmedTransaksi> {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        splashColor: theme == "dark" ? warnaPrimerDark : warnaPrimerLight,
         onTap: () {
           DetailPenjualanBloc detailBloc =
               BlocProvider.of<DetailPenjualanBloc>(context);
@@ -206,21 +225,20 @@ class _UnconfirmedTransaksiState extends State<UnconfirmedTransaksi> {
                       )));
         },
         child: Container(
-          height: 66,
-          //margin: EdgeInsets.only(top: 10),
+          padding: EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
-              // color: theme == "dark"
-              //     ? warnaLightDark.withOpacity(0.4)
-              //     : warnaPrimerLight,
-              border: Border.all(color: warnaPrimer),
-              borderRadius: BorderRadius.circular(5)),
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              color: Colors.white,
+              //border: Border.all(color: primaryColor),
+              borderRadius: BorderRadius.circular(10)),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Text(
+                tanggal,
+                style: TextStyle(fontSize: 12, color: textColor),
+              ),
+              Spacer(),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -228,38 +246,19 @@ class _UnconfirmedTransaksiState extends State<UnconfirmedTransaksi> {
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: warnaTeks),
+                        color: textBold),
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        meja,
-                        style: TextStyle(fontSize: 14, color: warnaTeks),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 2, horizontal: 5),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: warnaPrimer),
-                        child: Text(
-                          tanggal,
-                          style: TextStyle(fontSize: 12, color: warnaTitle),
-                        ),
-                      )
-                    ],
+                  Text(
+                    meja,
+                    style: TextStyle(fontSize: 14, color: textBold),
                   ),
                 ],
               ),
+              Spacer(),
               Text(
                 "IDR " + formatter.format(total),
                 style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: warnaTeks),
+                    fontSize: 16, fontWeight: FontWeight.bold, color: textBold),
               ),
             ],
           ),
